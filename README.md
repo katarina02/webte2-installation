@@ -218,11 +218,11 @@ Po navštívení pridellenej URL by sa mala načítať prázdna stránka s texto
 ### SSL certifikát pre HTTPS
 
 Stiahnuť súbory:
-- webte.fei.stuba.sk-chain-cert.pem
+- webte_fei_stuba_sk.pem
 - webte.fei.stuba.sk.key
 
 Skopírovať ich do:
-- /etc/ssl/certs/webte.fei.stuba.sk-chain-cert.pem;
+- /etc/ssl/certs/webte_fei_stuba_sk.pem;
 - /etc/ssl/private/webte.fei.stuba.sk.key;
 
 Zmeniť konfiguráciu Nginx v súbore ```/etc/sites-available/siteXX.webte.fei.stuba.sk```
@@ -250,7 +250,7 @@ server {
         index index.php index.html;
 
         ssl on;
-        ssl_certificate /etc/ssl/certs/webte.fei.stuba.sk-chain-cert.pem;
+        ssl_certificate /etc/ssl/certs/webte_fei_stuba_sk.pem;
         ssl_certificate_key /etc/ssl/private/webte.fei.stuba.sk.key;
 
         location ~ \.php$ {
@@ -334,7 +334,7 @@ server {
     index index.php index.html;
 
     ssl on;
-    ssl_certificate /etc/ssl/certs/webte.fei.stuba.sk-chain-cert.pem;
+    ssl_certificate /etc/ssl/certs/webte_fei_stuba_sk.pem;
     ssl_certificate_key /etc/ssl/private/webte.fei.stuba.sk.key;
 
     location ~ \.php$ {
