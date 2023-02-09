@@ -7,9 +7,9 @@ Pred samotnou inštaláciou je nutné byť pripojený k univerzitnej sieti buď 
 V celom návode je potrebné kľúčové slová **username** a **password** nahrádzať vlastným prihlasovacím menom (login) a heslom, ktoré ste obdržali mailom.
 
 ## Softvér a verzie
-- Ubuntu 20.04
+- Ubuntu 22.04
 - Nginx
-- PHP 8.1
+- PHP 8.2
 - MySQL 8
 - PhpMyAdmin
 
@@ -69,16 +69,32 @@ username sudo www-data
 Inštalácia MySQL databázového serveru.
 ```sh
 sudo apt install mysql-server
+```
+Kvôli spusteniu skriptu na zabezpečenie databázy je potrebné zmeniť spôsob prihlásenia pre root užívateľa.
+```sh
+sudo mysql
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'password';
+exit
+```
+Spustenie skriptu na zabezpečenie databázy.
+```sh
 sudo mysql_secure_installation
 ```
 Odpovede na otázky počas konfigurácie:
 - no
-- heslo na ssh prihlásenie (pravdepodobne je to jedno aké heslo sa zadá)
-- remove anonymous user - yes
+- Change the password for root? - no
+- Remove anonymous user? - yes
 - Disallow root login remotely? - yes
+- Remove test database and access to it? - no
 - Reload privilege tables now? - yes
+Spôsob prihlásenia pre root uzivateľa zmeníme naspäť.
+```sh
+mysql -u root -p
+ALTER USER 'root'@'localhost' IDENTIFIED WITH auth_socket;
+exit
+```
 
-Pirpojenie ku MySQL konzole.
+Pripojenie ku MySQL konzole.
 ```sh
 sudo mysql
 ```
@@ -103,7 +119,7 @@ mysql -u username -p
 ```
 
 ## PHP
-Inštalácia PHP 8.1.
+Inštalácia PHP 8.2.
 
 ```sh
 sudo apt install php-fpm
@@ -111,10 +127,10 @@ sudo apt install php-fpm
 
 Odpoveďou na príkaz ```php -v``` by malo byť
 ```sh
-PHP 8.1.2 (cli) (built: Jan 24 2022 10:42:33) (NTS)
+PHP 8.2.2 (cli) (built: Feb 7 2023 11:28:53) (NTS)
 Copyright (c) The PHP Group
-Zend Engine v4.1.2, Copyright (c) Zend Technologies
-    with Zend OPcache v8.1.2, Copyright (c), by Zend Technologies
+Zend Engine v4.2.2, Copyright (c) Zend Technologies
+    with Zend OPcache v8.2.2, Copyright (c), by Zend Technologies
 ```
 
 ### Vytvorenie Virtual host konfigurácie pre URL
@@ -143,7 +159,7 @@ server {
        
        location ~ \.php$ {
                 include snippets/fastcgi-php.conf;
-                fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+                fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
        }
 }
 ```
@@ -220,7 +236,7 @@ server {
 
         location ~ \.php$ {
                 include snippets/fastcgi-php.conf;
-                fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+                fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
         }
 }
 ```
@@ -256,7 +272,7 @@ location /phpmyadmin {
     location ~ ^/phpmyadmin/(.+\.php)$ {
         try_files $uri =404;
         root /usr/share/;
-        fastcgi_pass unix:/run/php/php8.1-fpm.sock;
+        fastcgi_pass unix:/run/php/php8.2-fpm.sock;
         fastcgi_index index.php;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include /etc/nginx/fastcgi_params;
@@ -304,7 +320,7 @@ server {
 
     location ~ \.php$ {
         include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/var/run/php/php8.1-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
     }
 
     include snippets/phpmyadmin.conf;
@@ -319,39 +335,6 @@ Po reštarte nginx serveru príkazom ```sudo service nginx restart``` otvoriť s
 Po zadaní prihlasovacích údajov zo sekcie [MySQL](#mysql) by sa mala zobraziť táto aplikácia
 
 ![phpmyadmin_6](https://raw.githubusercontent.com/matej172/webte2-installation/main/img/phpmyadmin_6.png)
-
-### Inštalácia verzie 5.1.2
-
-V prípade, že aplikácia phpMyAdmin po prihlásení vracia chybu 500, je nutné urobiť aktualizáciu na novšiu verziu.
-
-![phpmyadmin_4](https://raw.githubusercontent.com/matej172/webte2-installation/main/img/phpmyadmin_4.png)
-
-```sh
-cd ~
-wget www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.zip
-sudo apt install unzip
-unzip phpMyAdmin-latest-all-languages.zip
-sudo rm -R /usr/share/phpmyadmin/
-sudo mkdir /usr/share/phpmyadmin
-sudo mv phpMyAdmin-*/* /usr/share/phpmyadmin/
-```
-
-#### phpMyAdmin blowfish secret generator
-```sh
-sudo cp /usr/share/phpmyadmin/config.sample.inc.php /usr/share/phpmyadmin/config.inc.php
-sudo vim /usr/share/phpmyadmin/config.inc.php
-```
-Otvoriť stránku [https://phpsolved.com/phpmyadmin-blowfish-secret-generator/](https://phpsolved.com/phpmyadmin-blowfish-secret-generator/ )
-
-Prepísať riadok ```$cfg['blowfish_secret'] = ''``` podľa zobrazenej stránky.
-
-
-#### Vytvorenie tmp adresára pre phpMyAdmin
-```sh
-cd /usr/share/phpmyadmin/
-sudo mkdir tmp
-sudo chmod 777 tmp/
-```
 
 
 ## License
