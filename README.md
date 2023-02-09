@@ -27,6 +27,23 @@ Po prihlásení je nutné systém aktualizovať
 sudo apt update
 sudo apt dist-upgrade
 ```
+
+Ak sa po upgrade objaví táto notifikácia
+
+![nginx](https://raw.githubusercontent.com/katarina02/webte2-installation/main/img/package_configuration_1.png)
+
+spravte reštart systému pomocou príkazu
+```sh
+sudo reboot
+```
+Reštart systému ukončí reláciu, po niekoľkých sekundách treba znova nadviazať [ssh spojenie](#pripojenie-k-serveru-pomocou-ssh).
+
+V prípade, že sa počas inštalácie zobrazí okno podobné tomuto
+
+![nginx](https://raw.githubusercontent.com/katarina02/webte2-installation/main/img/package_configuration_2.png)
+
+nemeňte žiadne nastavenia, len stlačte Ok a pokračujte ďalej.
+
 Pridanie repozitárov pre novšie verzie softvéru php a phpmyadmin
 ```sh
 sudo add-apt-repository ppa:ondrej/php
@@ -41,6 +58,7 @@ sudo apt install nginx vim
 > Poznámka: Miesto editora vim môžete použiť aj iný editor, ako napríklad nano.
 
 Po navštívení IP adresy by webový prehliadač mal zobrazovať
+
 ![nginx](https://raw.githubusercontent.com/matej172/webte2-installation/main/img/nginx.png)
 
 Pridanie usera do skupiny www-data.
@@ -87,6 +105,7 @@ Odpovede na otázky počas konfigurácie:
 - Disallow root login remotely? - yes
 - Remove test database and access to it? - no
 - Reload privilege tables now? - yes
+
 Spôsob prihlásenia pre root uzivateľa zmeníme naspäť.
 ```sh
 mysql -u root -p
