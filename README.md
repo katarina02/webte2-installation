@@ -225,7 +225,7 @@ Skopírovať ich do:
 - /etc/ssl/certs/webte_fei_stuba_sk.pem;
 - /etc/ssl/private/webte.fei.stuba.sk.key;
 
-Zmeniť konfiguráciu Nginx v súbore ```/etc/sites-available/siteXX.webte.fei.stuba.sk```
+Zmeniť konfiguráciu Nginx v súbore ```/etc/nginx/sites-available/siteXX.webte.fei.stuba.sk```
 
 ```sh
 server {
@@ -281,6 +281,11 @@ Po spustení inštalácie sa zobrazí séria okien s otázkami, nikde nič nevyp
 ![phpmyadmin_2](https://raw.githubusercontent.com/matej172/webte2-installation/main/img/phpmyadmin_2.png)
 ![phpmyadmin_3](https://raw.githubusercontent.com/matej172/webte2-installation/main/img/phpmyadmin_3.png)
 
+V prípade, že sa počas inštalácie zobrazí okno podobné tomuto
+
+![nginx](https://raw.githubusercontent.com/katarina02/webte2-installation/main/img/package_configuration_3.png)
+
+nemeňte žiadne nastavenia, len stlačte Ok a pokračujte ďalej.
 
 Vytvoriť súbor ```/etc/nginx/snippets/phpmyadmin.conf``` a vložiť obsah:
 
